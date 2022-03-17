@@ -3,11 +3,29 @@ import React from "react";
 import { Button, Spinner } from "react-bootstrap";
 import LoginModle from "./LoginModle";
 import SignUpModel from "./SingUpModel";
+import jwtDecode from "jwt-decode";
 
 const NavBar = () => {
 	const [showModel, setShowModel] = React.useState(false);
 	const [showSignUpModel, setShowSignUpModel] = React.useState(false);
 	const [isLoading, setIsLoading] = React.useState(false);
+	const [token, setToken] = React.useState(0);
+	const [userData, setUserData] = React.useState({});
+
+	React.useEffect(() => {
+		let localToken = localStorage.getItem("token");
+
+		setToken(localToken);
+	}, []);
+
+	React.useEffect(() => {
+		if (token) {
+			let decode = jwtDecode(token);
+			setUserData(decode);
+		}
+	}, [token]);
+
+	console.log(userData);
 
 	const handleSubmitData = async (entryData) => {
 		setIsLoading(true);
@@ -40,6 +58,9 @@ const NavBar = () => {
 			);
 			if (data?.token) {
 				localStorage.setItem("token", data?.token);
+				let decode = jwtDecode(data?.token);
+				setUserData(decode);
+				setToken(data?.token);
 			}
 		} catch (error) {
 			console.error(error);
@@ -75,18 +96,37 @@ const NavBar = () => {
 				</p>
 			</div>
 			<div>
-				<button
-					className="btn-outline btn-color"
-					onClick={() => setShowModel(true)}
-				>
-					Log In
-				</button>
-				<button
-					className="btn-secondary-color btn-outline mr-4"
-					onClick={() => setShowSignUpModel(true)}
-				>
-					Sign Up
-				</button>
+				{!token && (
+					<>
+						<button
+							className="btn-outline btn-color"
+							onClick={() => setShowModel(true)}
+						>
+							Log In
+						</button>
+						<button
+							className="btn-secondary-color btn-outline mr-4"
+							onClick={() => setShowSignUpModel(true)}
+						>
+							Sign Up
+						</button>
+					</>
+				)}
+				{token && (
+					<>
+						{userData?.user?.accountUser === "Admin" && (
+							<button className="btn-outline btn-color">Create Post</button>
+						)}
+						<button
+							className="btn-secondary-color btn-outline mr-4"
+							onClick={() => {
+								localStorage.removeItem("token");
+							}}
+						>
+							Log Out
+						</button>
+					</>
+				)}
 			</div>
 			<LoginModle
 				show={showModel}
