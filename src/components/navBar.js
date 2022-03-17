@@ -14,7 +14,6 @@ const NavBar = () => {
 
 	React.useEffect(() => {
 		let localToken = localStorage.getItem("token");
-
 		setToken(localToken);
 	}, []);
 
@@ -70,6 +69,8 @@ const NavBar = () => {
 		}
 	};
 
+	console.log(token);
+
 	return (
 		<div
 			style={{
@@ -121,6 +122,8 @@ const NavBar = () => {
 							className="btn-secondary-color btn-outline mr-4"
 							onClick={() => {
 								localStorage.removeItem("token");
+								setToken(null);
+								setUserData({});
 							}}
 						>
 							Log Out
