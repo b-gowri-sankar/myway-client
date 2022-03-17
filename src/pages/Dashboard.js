@@ -73,7 +73,7 @@ const Dashboard = () => {
 								<Card.Img variant="top" src={post?.imageLink} />
 								<Card.Body>
 									<Card.Title>{post?.title}</Card.Title>
-									<Card.Text>{post?.content}</Card.Text>
+									<Card.Text className="cut-text">{post?.content}</Card.Text>
 								</Card.Body>
 								<Card.Footer style={{ backgroundColor: "white" }}>
 									<div className="d-flex justify-content-between">
