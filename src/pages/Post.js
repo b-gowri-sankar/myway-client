@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import NavBar from "../components/navBar";
 
 const Post = () => {
-	const { id } = useParams();
+	const { id, ...rest } = useParams();
 	const [postId, setPostId] = React.useState(0);
 	const [postData, setPostData] = React.useState(undefined);
 	React.useEffect(() => {
@@ -26,6 +26,7 @@ const Post = () => {
 			console.error(error);
 		}
 	};
+	console.log(rest);
 	return (
 		<>
 			<NavBar />

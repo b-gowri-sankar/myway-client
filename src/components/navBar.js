@@ -4,13 +4,16 @@ import { Button, Spinner } from "react-bootstrap";
 import LoginModle from "./LoginModle";
 import SignUpModel from "./SingUpModel";
 import jwtDecode from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
-const NavBar = () => {
+const NavBar = ({ handleRelaod }) => {
 	const [showModel, setShowModel] = React.useState(false);
 	const [showSignUpModel, setShowSignUpModel] = React.useState(false);
 	const [isLoading, setIsLoading] = React.useState(false);
 	const [token, setToken] = React.useState(0);
 	const [userData, setUserData] = React.useState({});
+
+	const navigate = useNavigate();
 
 	React.useEffect(() => {
 		let localToken = localStorage.getItem("token");
@@ -24,8 +27,6 @@ const NavBar = () => {
 		}
 	}, [token]);
 
-	console.log(userData);
-
 	const handleSubmitData = async (entryData) => {
 		setIsLoading(true);
 		try {
@@ -37,6 +38,7 @@ const NavBar = () => {
 			);
 			if (data?.email) {
 				setShowModel(true);
+				handleRelaod && handleRelaod();
 			}
 		} catch (error) {
 			console.error(error);
@@ -60,6 +62,7 @@ const NavBar = () => {
 				let decode = jwtDecode(data?.token);
 				setUserData(decode);
 				setToken(data?.token);
+				handleRelaod && handleRelaod();
 			}
 		} catch (error) {
 			console.error(error);
@@ -68,8 +71,6 @@ const NavBar = () => {
 			setShowModel(false);
 		}
 	};
-
-	console.log(token);
 
 	return (
 		<div
@@ -116,7 +117,14 @@ const NavBar = () => {
 				{token && (
 					<>
 						{userData?.user?.accountUser === "Admin" && (
-							<button className="btn-outline btn-color">Create Post</button>
+							<button
+								className="btn-outline btn-color"
+								onClick={() => {
+									navigate("/post/create");
+								}}
+							>
+								Create Post
+							</button>
 						)}
 						<button
 							className="btn-secondary-color btn-outline mr-4"
@@ -124,6 +132,8 @@ const NavBar = () => {
 								localStorage.removeItem("token");
 								setToken(null);
 								setUserData({});
+								handleRelaod && handleRelaod();
+								navigate("/");
 							}}
 						>
 							Log Out
