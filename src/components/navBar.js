@@ -132,7 +132,7 @@ const NavBar = ({ handleRelaod }) => {
 								localStorage.removeItem("token");
 								setToken(null);
 								setUserData({});
-								handleRelaod && handleRelaod();
+								handleRelaod && handleRelaod("logout");
 								navigate("/");
 							}}
 						>

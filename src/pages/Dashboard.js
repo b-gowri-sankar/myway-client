@@ -11,10 +11,15 @@ const Dashboard = () => {
 	const [token, setToken] = React.useState(0);
 	const [userData, setUserData] = React.useState({});
 	const [reload, setReload] = React.useState(false);
-	const handleRelaod = () => {
-		console.log("it si executing");
+	const handleRelaod = (type) => {
 		setReload(!reload);
 		setPostData([...postData]);
+		if (type === "logout") {
+			setUserData({});
+		} else {
+			let localToken = localStorage.getItem("token");
+			setToken(localToken);
+		}
 	};
 	React.useEffect(() => {
 		fetchAllPosts();
